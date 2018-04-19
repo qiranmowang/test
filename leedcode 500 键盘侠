@@ -1,0 +1,35 @@
+class Solution {
+public:
+    vector<string> findWords(vector<string>& words) {
+        vector<string>word;
+        unordered_set<char>c1{'q','w','e','r','t','y','u','i','o','p'};
+        unordered_set<char>c2{'a','s','d','f','g','h','j','k','l'};
+        unordered_set<char>c3{'z','x','c','v','b','n','m'};
+        int a1,a2,a3;
+        for(string wo:words)
+        {
+            int a1=0;int a2=0;int a3=0;
+            for(char c:wo)
+            {
+                if(c<'a')
+                    c+=32;
+                if(c1.count(c))
+                    a1=1;
+                if(c2.count(c))
+                    a2=1;
+                if(c3.count(c))
+                    a3=1;
+                if(a1+a2+a3>1)
+                    break;
+            } 
+            if(a1+a2+a3==1)
+            {
+                 word.push_back(wo);
+            }
+           
+        }
+        return word;
+        
+    }
+};
+
