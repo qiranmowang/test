@@ -1,0 +1,22 @@
+const vector<string>ha{".-","-...","-.-.","-..",".","..-.","--.","....","..",".---","-.-",".-..","--","-.","---",".--.","--.-",".-.","...","-","..-","...-",".--","-..-","-.--","--.."};
+class Solution {
+public:
+    int uniqueMorseRepresentations(vector<string>& words) {
+        set<string>set_ha;
+        string s;
+        for(string word:words)
+        { 
+            s="";
+            for(char ch:word)
+                s.append(ha[ch-'a']);
+            set_ha.insert(s);}
+        return set_ha.size();
+        
+        
+    }
+};
+
+
+ 
+//set是关联容器且作为容器可以存储同一数据类型的数据类型，且能够从一个数据集合中取出数据。在set中每个元素都是唯一的！！！，且系统能够根据元素的值自动排
+序。为什么是唯一的呢？因为他add用的是map.put(o, PRESENT)。至于map为什么不能重复，原理暂时还不清楚。
