@@ -1,0 +1,39 @@
+//用字符串流的写法
+class Solution {
+public:
+    string reverseWords(string s) {
+        stringstream ss(s);
+        string w="";string h="";
+        while(ss>>w)
+        {
+            reverse(w.begin(),w.end());
+            h+=w + " ";
+        }
+        h.pop_back();
+        return h;
+            
+        
+    }
+};
+//第二种，简单的循环调换
+class Solution {
+public:
+    string reverseWords(string s) {
+        int start=0;int end=0;int max=s.size();
+        
+        for(start,end;start<=max,end<=max;)
+        {
+            while(s[end]!=' '&&end<max)++end;
+            for(int t=start,h=end-1;t<h;)
+            {
+                swap(s[t],s[h]);
+                t++;h--;
+            }
+            start=end+1;end++;
+        }
+        
+        
+         return s;  
+        
+    }
+};
