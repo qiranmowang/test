@@ -1,0 +1,26 @@
+class Solution {
+public:
+    vector<int> selfDividingNumbers(int left, int right) {
+        vector<int> s;
+        for(int t=left;t<=right;t++)
+        {
+            if(bian(t))
+                s.push_back(t);
+        }
+        return s;
+    }
+    bool bian(int h)
+    {
+        string s=to_string(h);
+        for(char r:s)
+        {
+            if(r=='0'||h%(r-'0'))return false;
+        }
+        return true;
+               
+        
+        
+    }
+};
+
+//重点是将整形变成字符串行惊醒操作，省去取个位，十位等复杂的操作，直接按顺序去就OK
