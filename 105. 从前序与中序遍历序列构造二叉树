@@ -1,0 +1,51 @@
+根据一棵树的前序遍历与中序遍历构造二叉树。
+
+注意:
+你可以假设树中没有重复的元素。
+
+例如，给出
+
+前序遍历 preorder = [3,9,20,15,7]
+中序遍历 inorder = [9,3,15,20,7]
+返回如下的二叉树：
+
+    3
+   / \
+  9  20
+    /  \
+   15   7
+   
+   
+   
+   
+   
+   
+  /**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        return buildTree(preorder,0,preorder.size()-1,inorder,0,inorder.size()-1);}
+
+    TreeNode* buildTree(vector<int>& preorder,int pl,int pr,vector<int>&inorder,int il,int ir)
+    {
+        if(pl>pr||il>ir)
+            return NULL;
+         int n=0;
+        for(n;n<ir;n++)
+         { if(preorder[pl]==inorder[n])break;}
+        TreeNode *p=new TreeNode(preorder[pl]);
+        p->left=buildTree(preorder,pl+1,pl+n-il,inorder,il,n-1);
+        p->right=buildTree(preorder,pl+n-il+1,pr,inorder,n+1,ir);
+        return p;
+    
+   }
+
+}; 
