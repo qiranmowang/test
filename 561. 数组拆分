@@ -1,0 +1,58 @@
+/*给定长度为 2n 的数组, 你的任务是将这些数分成 n 对, 例如 (a1, b1), (a2, b2), ..., (an, bn) ，使得从1 到 n 的 min(ai, bi) 总和最大。
+
+示例 1:
+
+输入: [1,4,3,2]
+
+输出: 4
+解释: n 等于 2, 最大总和为 4 = min(1, 2) + min(3, 4).
+提示:
+
+n 是正整数,范围在 [1, 10000].
+数组中的元素范围在 [-10000, 10000].*/
+
+
+ 
+//第一种自己重新建个容器进行排序
+class Solution {
+public:
+    int arrayPairSum(vector<int>& nums) {
+        vector<int>min;
+        int c=0;
+        vector<int>num(nums);
+        while(c!=nums.size()-1)
+        {
+            int min1=0;
+            for(int i=0;i<num.size()-1;i++)
+            {
+                if(nums[i]<nums[min1])
+                {min1=i;}
+            }
+            min.push_back(num[min1]);
+            num.erase(num.begin()+min1);
+            c++;
+        }
+        int i=2,p=0;
+         while(i<=nums.size())
+         {
+             p+=min[i];
+             i=i*2;
+             
+         }
+        return nums[0]+p;
+    }
+};
+
+ 
+//
+class Solution {
+public:
+    int arrayPairSum(vector<int>& nums) {
+        int res = 0, n = nums.size();
+        sort(nums.begin(), nums.end());
+        for (int i = 0; i < n; i += 2) {
+            res += nums[i];
+        }
+        return res;
+    }
+};
