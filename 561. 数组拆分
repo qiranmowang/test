@@ -20,26 +20,26 @@ public:
         vector<int>min;
         int c=0;
         vector<int>num(nums);
-        while(c!=nums.size()-1)
+        while(c<nums.size())
         {
             int min1=0;
-            for(int i=0;i<num.size()-1;i++)
+            for(int i=0;i<num.size();i++)
             {
-                if(nums[i]<nums[min1])
+                if(num[i]<num[min1])
                 {min1=i;}
             }
             min.push_back(num[min1]);
             num.erase(num.begin()+min1);
             c++;
         }
-        int i=2,p=0;
-         while(i<=nums.size())
+        int p=0;int n=0;
+         while(n<nums.size())
          {
-             p+=min[i];
-             i=i*2;
+             p+=min[n];
+             n=n+2;
              
          }
-        return nums[0]+p;
+        return p;
     }
 };
 
