@@ -1,0 +1,70 @@
+/*给定一个按照升序排列的整数数组 nums，和一个目标值 target。找出给定目标值在数组中的开始位置和结束位置。
+
+你的算法时间复杂度必须是 O(log n) 级别。
+
+如果数组中不存在目标值，返回 [-1, -1]。
+
+示例 1:
+
+输入: nums = [5,7,7,8,8,10], target = 8
+输出: [3,4]
+示例 2:
+
+输入: nums = [5,7,7,8,8,10], target = 6
+输出: [-1,-1] */
+
+ 
+//第一种是用二分法找出一个需求值再在附近搜索一样的，如果遇到特殊情况就是全是一样的，复杂度就是O(n)了。
+class Solution {
+public:
+    vector<int> searchRange(vector<int>& nums, int target) {
+        vector<int>ses(2,-1);
+        int he=erfen(nums,0,nums.size()-1,target);
+        if(he==-1)return {-1,-1};
+        int right=he,left=he;
+            
+        while(left>0&&nums[left-1]==nums[he])
+            left--;
+        while(right<nums.size()&&nums[right+1]==nums[he])
+            right++;
+            
+        
+        return {left,right};
+    }
+    int erfen(vector<int>&nums,int left,int right,int target)
+{
+    if(left>right)return -1;
+    int mid=(left+right)/2;
+    if(nums[mid]==target)return mid;
+    else if(nums[mid]>target)
+        return erfen(nums,left,mid-1,target);
+    else
+        return erfen(nums,mid+1,right,target);
+}
+};
+
+
+ 
+//第二种，更加完善
+class Solution {
+public:
+    vector<int> searchRange(vector<int>& nums, int target) {
+        vector<int> res(2, -1);
+        int left = 0, right = nums.size() - 1;
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] < target) left = mid + 1;
+            else right = mid;
+        }
+        if (nums[right] != target) return res;
+        res[0] = right;
+        right = nums.size();
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] <= target) left = mid + 1;
+            else right= mid;
+        }
+        res[1] = left - 1;
+        return res;
+    }
+    //注意56行和64行，一个等于分在左边，一个分在右边，这样就把相同数字的最左边和最右边给分出来了。
