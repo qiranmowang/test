@@ -1,0 +1,38 @@
+给定一个字符串 S 和一个字符 C。返回一个代表字符串 S 中每个字符到字符串 S 中的字符 C 的最短距离的数组。
+
+示例 1:
+
+输入: S = "loveleetcode", C = 'e'
+输出: [3, 2, 1, 0, 1, 0, 0, 1, 2, 2, 1, 0]
+说明:
+
+字符串 S 的长度范围为 [1, 10000]。
+C 是一个单字符，且保证是字符串 S 里的字符。
+S 和 C 中的所有字母均为小写字母。
+
+
+
+
+
+class Solution {
+public:
+    vector<int> shortestToChar(string S, char C) {
+        vector<int>shu;
+        for(int n=0;n<S.size();n++)
+        {
+            if(S[n]==C) shu.push_back(0);
+            else
+            {
+                int a=0,b=0;int n1=n,n2=n;
+                while(S[n1]!=C&&n1>=0)
+                {n1--;a++;}
+                if(S[n1]!=C) a=999;    //注意这里，如果因为满足n1>0而返回然而s[n1]却不等于C就会出错，所以要判断一下，不然通不过oj
+                while(S[n2]!=C&&n2<S.size())
+                {n2++;b++;}
+                if(S[n2]!=C) b=999;
+                shu.push_back(a<b?a:b);
+            }
+        }
+        return shu;
+    }
+};
