@@ -1,0 +1,65 @@
+给定一个列表 accounts，每个元素 accounts[i] 是一个字符串列表，其中第一个元素 accounts[i][0] 是 名称 (name)，其余元素是 emails 表示该帐户的邮箱地址。
+
+现在，我们想合并这些帐户。如果两个帐户都有一些共同的邮件地址，则两个帐户必定属于同一个人。请注意，即使两个帐户具有相同的名称，它们也可能属于不同的人，因为人们可能具有相同的名称。一个人最初可以拥有任意数量的帐户，但其所有帐户都具有相同的名称。
+
+合并帐户后，按以下格式返回帐户：每个帐户的第一个元素是名称，其余元素是按顺序排列的邮箱地址。accounts 本身可以以任意顺序返回。
+
+例子 1:
+
+Input: 
+accounts = [["John", "johnsmith@mail.com", "john00@mail.com"], ["John", "johnnybravo@mail.com"], ["John", "johnsmith@mail.com", "john_newyork@mail.com"], ["Mary", "mary@mail.com"]]
+Output: [["John", 'john00@mail.com', 'john_newyork@mail.com', 'johnsmith@mail.com'],  ["John", "johnnybravo@mail.com"], ["Mary", "mary@mail.com"]]
+Explanation: 
+  第一个和第三个 John 是同一个人，因为他们有共同的电子邮件 "johnsmith@mail.com"。 
+  第二个 John 和 Mary 是不同的人，因为他们的电子邮件地址没有被其他帐户使用。
+  我们可以以任何顺序返回这些列表，例如答案[['Mary'，'mary@mail.com']，['John'，'johnnybravo@mail.com']，
+  ['John'，'john00@mail.com'，'john_newyork@mail.com'，'johnsmith@mail.com']]仍然会被接受
+  
+  
+  
+  //map m想用unordered_set通不过oj，他是无序的，账号对应的邮箱任意排列
+  这题思路就是先遍历每个账户的每个邮箱先root与自己映射，每个邮箱fu映射相应的账户，然后在遍历，这次将每个账户的邮箱与第一个邮箱映射。（如何遇到一个账户
+  的邮箱与前面的账户的邮箱相同就会将前面的第一个邮箱的映射变成现在的账户，这样就把相同的账户通过第一个邮箱联系到一起）。然后再将对应的第一个邮箱作为
+  key，与其映射的邮箱作为value，value成为一个数组，再将账号插入，最后将每个value赋值给一个二维数组就行了
+ class Solution {
+public:
+    vector<vector<string>> accountsMerge(vector<vector<string>>& accounts) {
+        vector<vector<string>>res;
+        unordered_map<string,string>root;
+        unordered_map<string,string>fu;
+        unordered_map<string,set<string>>m;
+        for(auto account:accounts)
+        {
+            for(int t=1;t<account.size();++t)
+            {
+                root[account[t]]=account[t];
+                fu[account[t]]=account[0];
+            }
+            
+        }
+        for(auto account:accounts)
+        {
+            string p=find(account[1],root);
+            for(int t=2;t<account.size();++t)
+            {
+                root[find(account[t],root)]=p;
+            }
+        }
+        
+        for(auto account:accounts)
+        {
+            for(int t=1;t<account.size();++t)
+                m[find(account[t],root)].insert(account[t]);
+        }
+        for(auto a:m)
+        {
+            vector<string>v(a.second.begin(),a.second.end());
+            v.insert(v.begin(),fu[a.first]);
+            res.push_back(v);
+        }
+        return res;
+        
+    }
+    string find(string s,unordered_map<string,string>&root){
+        return root[s]==s ? s : find(root[s],root);}
+};
