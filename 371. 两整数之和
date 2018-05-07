@@ -1,0 +1,21 @@
+不使用运算符 + 和-，计算两整数a 、b之和。
+
+示例：
+若 a = 1 ，b = 2，返回 3。
+
+
+
+class Solution {
+public:
+    int getSum(int a, int b) {
+        if(b==0) return a;
+        else
+        {
+            int c=(a^b);
+            int d=(a&b)<<1;
+            return getSum(c,d);
+        
+        }
+        
+    }
+};
