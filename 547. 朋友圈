@@ -1,0 +1,123 @@
+班上有 N 名学生。其中有些人是朋友，有些则不是。他们的友谊具有是传递性。如果已知 A 是 B 的朋友，B 是 C 的朋友，那么我们可以认为 A 也是 C 的朋友。所谓的朋友圈，是指所有朋友的集合。
+
+给定一个 N * N 的矩阵 M，表示班级中学生之间的朋友关系。如果M[i][j] = 1，表示已知第 i 个和 j 个学生互为朋友关系，否则为不知道。你必须输出所有学生中的已知的朋友圈总数。
+
+示例 1:
+
+输入: 
+[[1,1,0],
+ [1,1,0],
+ [0,0,1]]
+输出: 2 
+说明：已知学生0和学生1互为朋友，他们在一个朋友圈。
+第2个学生自己在一个朋友圈。所以返回2。
+示例 2:
+
+输入: 
+[[1,1,0],
+ [1,1,1],
+ [0,1,1]]
+输出: 1
+说明：已知学生0和学生1互为朋友，学生1和学生2互为朋友，所以学生0和学生2也是朋友，所以他们三个在一个朋友圈，返回1。
+
+
+ 
+第一种 比较麻烦，自己建了双重bool型数组用来标记
+class Solution {
+public:
+    int findCircleNum(vector<vector<int>>& M) {
+        int m=M.size(),n=M[0].size();
+        vector<vector<bool>>num(m,vector<bool>(n,false));
+        int res=0;
+        for(int u=0;u<m;u++)
+        {
+            for(int i=0;i<n;i++)
+            {
+                if(M[u][i]==1&&!num[u][i])
+                {
+                    finddfs(u,i,M,num);
+                    res++;
+                }
+            }
+        }
+        return res;
+    }
+    void finddfs(int u,int i,vector<vector<int>>& M,vector<vector<bool>>&num)
+    {
+        if(M[u][i]==1)
+        {
+            num[u][i]=true;num[i][u]=true;
+        }
+        for(int t=0;t<M[0].size();t++)
+        {
+            if(M[u][t]==1&&!num[u][t])
+            {
+                num[u][t]=true;num[t][u]=true;
+                finddfs(t,0,M,num);
+                
+            }
+        }
+    }
+                 
+};
+ 
+第二种 其实只需要一个一维bool型数组就行了
+class Solution {
+public:
+    int findCircleNum(vector<vector<int>>& M) {
+        int n = M.size(), res = 0;
+        vector<bool> visited(n, false);
+        for (int i = 0; i < n; ++i) {
+            if (visited[i]) continue;
+            helper(M, i, visited);
+            ++res;
+        }
+        return res;
+    }
+    void helper(vector<vector<int>>& M, int k, vector<bool>& visited) {
+        visited[k] = true;
+        for (int i = 0; i < M.size(); ++i) {
+            if (!M[k][i] || visited[i]) continue;
+            helper(M, i, visited);
+        }
+    }
+};
+        
+        
+        
+ 第三种用初始时给每一个对象都赋上不同的标签，然后对于属于同一类的对象，在root中查找其标签，如果不同，那么将其中一个对象的标签赋值给
+ 另一个对象，注意root数组中的数字跟数字的坐标是有很大关系的，root存的是属于同一组的另一个对象的坐标，这样通过getRoot函数可以使同一
+ 个组的对象返回相同的值
+ class Solution {
+public:
+    int findCircleNum(vector<vector<int>>& M) {
+        int n = M.size(), res = n;
+        vector<int> root(n);
+        for (int i = 0; i < n; ++i) root[i] = i;
+        for (int i = 0; i < n; ++i) {
+            for (int j = i + 1; j < n; ++j) {
+                if (M[i][j] == 1) {
+                    int p1 = getRoot(root, i);
+                    int p2 = getRoot(root, j);
+                    if (p1 != p2) {
+                        --res;
+                        root[p2] = p1;
+                    }
+                }
+            }   
+        }
+        return res;
+    }
+    int getRoot(vector<int>& root, int i) {
+        while (i != root[i]) {
+            root[i] = root[root[i]];
+            i = root[i];
+        }
+        return i;
+    }
+};
+ 
+ 
+ 
+ 
+    
