@@ -1,0 +1,78 @@
+给定一个非空二叉树, 返回一个由每层节点平均值组成的数组.
+
+示例 1:
+
+输入:
+    3
+   / \
+  9  20
+    /  \
+   15   7
+输出: [3, 14.5, 11]
+解释:
+第0层的平均值是 3,  第1层是 14.5, 第2层是 11. 因此返回 [3, 14.5, 11].
+
+
+
+
+ 
+第一种 用序列做
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<double> averageOfLevels(TreeNode* root) {
+        vector<double>aver;
+        
+        queue<TreeNode*>p;
+        p.push(root);
+        while(!p.empty())
+        {
+            double m=0;
+            int n=p.size();
+            for(int u=0;u<n;u++)
+            {
+                TreeNode *t=p.front();p.pop();
+                m+=t->val;
+                if(t->left) p.push(t->left);
+                if(t->right) p.push(t->right);
+            }
+            aver.push_back(m/n);
+        }
+        return aver;
+        
+    }
+};
+
+
+ 
+第二种 用递归，记录层数
+class Solution {
+public:
+    vector<double> averageOfLevels(TreeNode* root) {
+        vector<double> res, cnt;
+        helper(root, 0, cnt, res);
+        for (int i = 0; i < res.size(); ++i) {
+            res[i] /= cnt[i];
+        }
+        return res;
+    }
+    void helper(TreeNode* node, int level, vector<double>& cnt, vector<double>& res) {
+        if (!node) return;
+        if (res.size() <= level) {
+            res.push_back(0);
+            cnt.push_back(0);
+        }
+        res[level] += node->val;
+        ++cnt[level];
+        helper(node->left, level + 1, cnt, res);
+        helper(node->right, level + 1, cnt, res);
+    }
+};
